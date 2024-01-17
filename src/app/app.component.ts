@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { GithubService, GithubUser } from './services/github.service';
 
 @Component({
@@ -10,7 +10,6 @@ import { GithubService, GithubUser } from './services/github.service';
   imports: [CommonModule, FormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
   username: string = '';
@@ -21,15 +20,15 @@ export class AppComponent {
   ) {}
 
   getUser() {
-    this.githubService
+    return this.githubService
       .getUser(this.username)
       .pipe(
+        map((user) => user),
         tap({
           next: (user) => {
             this.user = user;
           }
         })
-      )
-      .subscribe();
+      );
   }
 }
