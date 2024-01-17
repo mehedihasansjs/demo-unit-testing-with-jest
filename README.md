@@ -1,88 +1,23 @@
-# Initial Angular Project
+# Matchers
 
-Install `jest` and `jest-environment-jsdom` as dev dependencies:
+Add a test to `app.component.spec.ts`
 
-  ```bash
-  npm install --save-dev \
-  jest \
-  jest-environment-jsdom \
-  @types/jest
-  ```
-
-Check the `package.json` file to see the new dependencies. We can remove the dependencies from Karma and Jasmine:
-
-  ```bash
-  npm uninstall --save-dev \
-  karma \
-  karma-chrome-launcher \
-  karma-coverage \
-  karma-jasmine \
-  karma-jasmine-html-reporter \
-  jasmine-core \
-  @types/jasmine
-  ```
-
-Check the `package.json` file to see the removed dependencies.
-
-Update `angular.json` to use `jest` instead of `karma`:
-
-Find these lines
-```json
-{
-  "test": {
-    "builder": "@angular-devkit/build-angular:karma",
-    "options": {
-      "polyfills": [
-        "zone.js",
-        "zone.js/testing"
-      ],
-      "tsConfig": "tsconfig.spec.json",
-      "assets": [
-        "src/favicon.ico",
-        "src/assets"
-      ],
-      "styles": [
-        "src/styles.css"
-      ],
-      "scripts": []
-    }
-  }
-}
+```typescript
+it('should result 4 when add 2 + 2', () => {
+    expect(2 + 2).toEqual(4);
+  });
 ```
 
-And replace them with these lines
-```json
-{
-  "test": {
-    "builder": "@angular-devkit/build-angular:jest",
-    "options": {
-      "polyfills": ["zone.js", "zone.js/testing"],
-      "tsConfig": "tsconfig.spec.json"
-    }
-  }
-}
+Run the test and everything is ok.
+
+Now, we will write a failing test.
+
+```typescript
+it('should result 5 when add 3 + 2', () => {
+    expect(3 + 2).toEqual(3);
+  });
 ```
 
-Then update `tsconfig.spec.json` to use `jest` instead of `karma`:
+Run the test and we will see errors.
 
-Find these lines
-```json
-{
-  "compilerOptions": {
-    "outDir": "./out-tsc/spec",
-    "types": [
-      "jasmine",
-    ]
-  }
-}
-```
-
-And replace them with these lines
-```json
-{
-  "compilerOptions": {
-    "outDir": "./out-tsc/spec",
-    "types": ["jest"]
-  }
-}
-```
+Jest will not skip the tests after failing one test. Try adding another test after the failing test.
