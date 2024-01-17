@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { faker } from '@faker-js/faker';
+import { tap, throwError } from 'rxjs';
 
 import { Product, ProductService } from './product.service';
 
@@ -16,28 +16,33 @@ describe('ProductService', () => {
   });
 
   describe('getProducts', () => {
-    it('should return an array of products', () => {
-      const products = service.getProducts();
-      expect(products.length).toBeGreaterThanOrEqual(0);
+    it('should return an array of products', (done) => {
+      const products$ = service.getProducts();
+      products$
+        .pipe(
+          tap({
+            next: (products: Product[]) => {
+              expect(products.length).toBeGreaterThanOrEqual(0);
+              done();
+            }
+          })
+        )
+        .subscribe();
     });
 
-    it('should return an array of 3 products', () => {
-      const fakeProducts: Product[] = [];
-      for(let i = 0; i < 3; i++) {
-        fakeProducts.push({
-          id: faker.string.uuid(),
-          name: faker.commerce.productName(),
-          description: faker.lorem.sentence(),
-          price: +faker.commerce.price({
-            min: 1,
-            max: 100,
-          }),
-        });
-      }
-
-      jest.spyOn(service, 'getProducts').mockReturnValue(fakeProducts);
-      const products = service.getProducts();
-      expect(products.length).toEqual(3);
+    it('should throw error', (done) => {
+      jest.spyOn(service, 'getProducts').mockReturnValue(throwError(() => new Error('Error in getProducts')));
+      const products$ = service.getProducts();
+      products$
+      .pipe(
+        tap({
+          error: (err) => {
+            expect(err.message).toBe('Error in getProducts');
+            done();
+          }
+        })
+      )
+      .subscribe();
     });
   });
 });
