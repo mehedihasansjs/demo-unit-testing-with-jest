@@ -3,22 +3,33 @@ import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@an
 import { TestBed } from '@angular/core/testing';
 import { faker } from '@faker-js/faker';
 import { tap } from 'rxjs';
-import { ConfigService } from './config.service';
 
 import { GithubService, GithubUser } from './github.service';
 
 describe('GithubService', () => {
   let service: GithubService;
   let controller: HttpTestingController;
+  let mockConfigService: any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule
+      ],
+      providers: [
+        {
+          provide: 'ConfigService',
+          useValue: mockConfigService
+        }
       ]
     });
     service = TestBed.inject(GithubService);
     controller = TestBed.inject(HttpTestingController);
+
+    // mock the ConfigService
+    mockConfigService = {
+      getApiUrl: jest.fn()
+    };
   });
 
   it('should be created', () => {
@@ -47,7 +58,9 @@ describe('GithubService', () => {
         .subscribe();
 
       // check if the request was made
-      const request: TestRequest = controller.expectOne(`https://api.github.com/users/${username}`);
+      const apiUrl = 'https://api.github.com';
+      jest.spyOn(mockConfigService, 'getApiUrl').mockReturnValue(apiUrl);
+      const request: TestRequest = controller.expectOne(`${apiUrl}/users/${username}`);
 
       // mock the response
       request.flush(user);
@@ -76,7 +89,9 @@ describe('GithubService', () => {
         .subscribe();
 
       // check if the request was made
-      const request: TestRequest = controller.expectOne(`https://api.github.com/users/${username}`);
+      const apiUrl = 'https://api.github.com';
+      jest.spyOn(mockConfigService, 'getApiUrl').mockReturnValue(apiUrl);
+      const request: TestRequest = controller.expectOne(`${apiUrl}/users/${username}`);
 
       // mock the response
       request.flush(error, {
