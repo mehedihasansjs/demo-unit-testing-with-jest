@@ -3,7 +3,6 @@ import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@an
 import { TestBed } from '@angular/core/testing';
 import { faker } from '@faker-js/faker';
 import { tap } from 'rxjs';
-import { ConfigService } from './config.service';
 
 import { GithubService, GithubUser } from './github.service';
 
