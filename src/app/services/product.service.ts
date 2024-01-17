@@ -6,4 +6,15 @@ import { Injectable } from '@angular/core';
 export class ProductService {
 
   constructor() { }
+
+  getProducts(): Product[] {
+    return [];
+  }
+}
+
+export class Product {
+  id?: string;
+  name?: string;
+  description?: string;
+  price?: number;
 }

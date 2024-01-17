@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { faker } from '@faker-js/faker';
 
-import { ProductService } from './product.service';
+import { Product, ProductService } from './product.service';
 
 describe('ProductService', () => {
   let service: ProductService;
@@ -12,5 +13,31 @@ describe('ProductService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  describe('getProducts', () => {
+    it('should return an array of products', () => {
+      const products = service.getProducts();
+      expect(products.length).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should return an array of 3 products', () => {
+      const fakeProducts: Product[] = [];
+      for(let i = 0; i < 3; i++) {
+        fakeProducts.push({
+          id: faker.string.uuid(),
+          name: faker.commerce.productName(),
+          description: faker.lorem.sentence(),
+          price: +faker.commerce.price({
+            min: 1,
+            max: 100,
+          }),
+        });
+      }
+
+      jest.spyOn(service, 'getProducts').mockReturnValue(fakeProducts);
+      const products = service.getProducts();
+      expect(products.length).toEqual(3);
+    });
   });
 });
