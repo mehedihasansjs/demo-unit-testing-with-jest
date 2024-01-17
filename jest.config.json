@@ -1,0 +1,9 @@
+{
+  "collectCoverage": true,
+  "cacheDirectory": "<rootDir>/.jest/cache",
+  "coverageDirectory": "<rootDir>/coverage",
+  "coverageProvider": "v8",
+  "coverageReporters": ["text-summary", "html"],
+  "reporters": ["summary", "default"],
+  "verbose": true
+}
