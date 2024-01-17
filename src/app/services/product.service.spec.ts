@@ -35,7 +35,7 @@ describe('ProductService', () => {
         });
       }
 
-      jest.spyOn(service, 'getProducts').mockReturnValue(fakeProducts);
+      service.setProducts(fakeProducts);
       const products = service.getProducts();
       expect(products.length).toEqual(3);
     });

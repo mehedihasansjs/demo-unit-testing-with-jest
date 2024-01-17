@@ -4,11 +4,16 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ProductService {
+  private products: Product[] = [];
 
   constructor() { }
 
   getProducts(): Product[] {
-    return [];
+    return this.products;
+  }
+
+  setProducts(products: Product[]): void {
+    this.products = products;
   }
 }
 
